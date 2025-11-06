@@ -6,7 +6,127 @@
 /* === Elementos DOM e contexto === */
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+// === ELEMENTOS PRINCIPAIS ===
+const startScreen = document.getElementById('startScreen');
+const startBtn = document.getElementById('startBtn');
+const game = document.getElementById('game');
+const player = document.getElementById('player');
+const scoreValue = document.getElementById('scoreValue');
+const highScoreValue = document.getElementById('highScoreValue');
 
+let score = 0;
+let highScore = localStorage.getItem('highScore') || 0;
+highScoreValue.textContent = highScore;
+
+let playerX = 50;
+let playerY = 20;
+let jumping = false;
+
+// === INICIAR JOGO ===
+startBtn.addEventListener('click', () => {
+  startScreen.classList.add('fade-out');
+  setTimeout(() => {
+    startScreen.style.display = 'none';
+    game.classList.remove('hidden');
+  }, 1000);
+});
+
+// === CRIAR MOEDAS E OBSTÁCULOS ===
+function spawnItem(type) {
+  const item = document.createElement('div');
+  item.classList.add(type);
+  item.style.position = 'absolute';
+  item.style.bottom = '20px';
+  item.style.left = '100vw';
+  item.style.width = '40px';
+  item.style.height = '40px';
+  item.style.backgroundImage = type === 'moeda'
+    ? "url('images/moeda.png')"
+    : "url('images/obstaculo.png')";
+  item.style.backgroundSize = 'cover';
+  document.getElementById('game').appendChild(item);
+
+  const moveInterval = setInterval(() => {
+    const left = parseInt(item.style.left);
+    if (left < -50) {
+      item.remove();
+      clearInterval(moveInterval);
+    } else {
+      item.style.left = (left - 5) + 'px';
+    }
+
+    const playerRect = player.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+
+    if (
+      playerRect.left < itemRect.right &&
+      playerRect.right > itemRect.left &&
+      playerRect.top < itemRect.bottom &&
+      playerRect.bottom > itemRect.top
+    ) {
+      if (type === 'moeda') {
+        score++;
+        scoreValue.textContent = score;
+        item.remove();
+      } else {
+        alert('Você perdeu! 😢 Pontuação final: ' + score);
+        if (score > highScore) {
+          highScore = score;
+          localStorage.setItem('highScore', highScore);
+        }
+        location.reload();
+      }
+    }
+  }, 30);
+}
+
+setInterval(() => spawnItem('moeda'), 2000);
+setInterval(() => spawnItem('obstaculo'), 3000);
+
+// === MOVIMENTO DO PERSONAGEM ===
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') playerX -= 20;
+  if (e.key === 'ArrowRight') playerX += 20;
+  if (e.key === 'ArrowUp' && !jumping) jump();
+  if (e.code === 'Space') e.preventDefault(); // desativa espaço
+  player.style.left = playerX + 'px';
+});
+
+// === FUNÇÃO DE PULO ===
+function jump() {
+  jumping = true;
+  let jumpHeight = 0;
+  const up = setInterval(() => {
+    if (jumpHeight >= 120) {
+      clearInterval(up);
+      const down = setInterval(() => {
+        if (jumpHeight <= 0) {
+          clearInterval(down);
+          jumping = false;
+        } else {
+          jumpHeight -= 10;
+          player.style.bottom = 20 + jumpHeight + 'px';
+        }
+      }, 20);
+    } else {
+      jumpHeight += 10;
+      player.style.bottom = 20 + jumpHeight + 'px';
+    }
+  }, 20);
+}
+
+// === CONTROLES MOBILE ===
+document.getElementById('leftBtn').addEventListener('touchstart', () => {
+  playerX -= 20;
+  player.style.left = playerX + 'px';
+});
+
+document.getElementById('rightBtn').addEventListener('touchstart', () => {
+  playerX += 20;
+  player.style.left = playerX + 'px';
+});
+
+document.getElementById('jumpBtn').addEventListener('touchstart', jump);
 let W = canvas.width = canvas.clientWidth;
 let H = canvas.height = canvas.clientHeight;
 
@@ -499,3 +619,4 @@ resize();
   ctx.font = '22px Inter, Arial';
   ctx.fillText('Clique em Iniciar para jogar', 36, 80);
 })();
+
