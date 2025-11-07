@@ -1,0 +1,155 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #111;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  /* === Tela inicial === */
+  #startScreen {
+    text-align: center;
+  }
+  
+  #startBtn {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 10px;
+    background-color: orange;
+    cursor: pointer;
+  }
+  
+  /* === Estrutura principal === */
+  #container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  
+  /* === Área do jogo === */
+  #game {
+    position: relative;
+    width: 380px;
+    height: 550px;
+    border: 4px solid #fff;
+    border-radius: 15px;
+    background-image: url('aldeia.jpg');
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
+  
+  /* === HUD === */
+  #hud {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 18px;
+  }
+  
+  /* === Personagem === */
+  #player {
+    position: absolute;
+    bottom: 20px;
+    left: 150px;
+    width: 60px;
+    height: 60px;
+  }
+  
+  /* === Itens === */
+  .moeda, .obstaculo {
+    position: absolute;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  
+  .moeda {
+    width: 30px;
+    height: 30px;
+    background-image: url('moeda.png');
+  }
+  
+  .obstaculo {
+    width: 45px;
+    height: 45px;
+    background-image: url('obstaculo.png');
+  }
+  
+  /* === Tela de "Você morreu" === */
+  #gameOver {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 36px;
+    font-weight: bold;
+    color: red;
+    text-shadow: 2px 2px 5px black;
+  }
+  
+  /* === Painel lateral === */
+  #sidePanel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  #sidePanel button {
+    background-color: orange;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    padding: 8px 15px;
+    cursor: pointer;
+  }
+  
+  #sidePanel button:hover {
+    background-color: gold;
+  }
+  
+  /* === Ranking === */
+  #ranking {
+    background-color: #222;
+    border: 2px solid #555;
+    border-radius: 10px;
+    padding: 10px;
+    width: 150px;
+    text-align: center;
+  }
+  
+  #ranking ol {
+    list-style: decimal;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* === Controles mobile === */
+  #controls {
+    margin-top: 15px;
+    display: flex;
+    gap: 40px;
+  }
+  
+  #controls button {
+    font-size: 30px;
+    padding: 15px;
+    border: none;
+    border-radius: 50%;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  
+  #controls button:active {
+    background-color: orange;
+  }
